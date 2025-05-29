@@ -1,0 +1,49 @@
+=-- đánh giá model : METRICS -== 
+Accuracy = TP + TN / ALL 
+
+Precision = TP / TP + FP 			 : model dự đoán đúng / tổng số lần dự đoán(predict của model)	
+						tăng sample của class 1 (chất lượng)
+					nhằm muốn class P dự đoán pre cao nhất,mang tính cá thể cấp bách
+
+Recall = TP / TP + FN = True P rate		:model pre đúng / tổng samples thuộc lớp Positive(ở label)
+						tránh bỏ sót ( lấy nhầm hơn bỏ sót )
+						 tăng sample, chú trọng vào số lượng
+					bắt nhầm còn hơn bỏ sót (covid,tính lây nhiễm cao,ung thư..),mang tính quần thể,tránh bỏ sót
+=-- không thể làm cho Pre và Re cùng tăng/ chỉ có 1 trong 2--=
+
+F1_score = 2*pre*re/ pre + re      		: khi không biết nên chú trọng vào Pre hay Re (độ bão hòa)
+
+False P rate = FP / FP + TN 
+True P rate  = TP / TP + FN 
+
+--== ROC curve (Receiver Operating Characteristic) ==--
+-thể hiện sự tương quan giữa FPR và TPR(recall) : chạy từ [0:1]
+nối các điểm từ 0-1 thành 1 đường ROC 
+nếu càn gần TPR thì model càng tốt
+nếu TPR và FPR =1 ==> model auto class 1 (ngưỡng 0)
+nêu TPR và FPR =0 ==> model auto class 0 (ngưỡng 1)
+AUC :   	==> diện tích đường cong (càng gần 1 model càng tốt) 
+
+
+
+
+
+
+
+
+
+=--LOSS FUNCTION--==
+
+L1 : chú trọng việc cân bằng mô hình 							sum(Ypre-Yactual)
+L2 : chú trọng vào ngoại lệ ( giảm ngoại lệ ) nhưng bỏ qua những dữ liệu có độ lệch nhỏ sum(Ypre-Yactual)^2
+
+=---SPLIT DATA---= 
+split dữ liệu tiêu chuẩn --> train validation test
+Train : dùng training
+
+Validation : dùng để theo dõi xem model có đang đi đúng yêu cầu không ? 
+		: không dùng để so sánh giữa những model khác nhau 
+
+Test : kiểm tra độ thực tế ( ko đc dùng trong lúc train )
+
+split kiểu K-Fold Cross validation ---> chia nhiều lần train validation (k=n) sau dó tính mean(loss) rồi train lại mà không cần chia dữ liệu cho vali 

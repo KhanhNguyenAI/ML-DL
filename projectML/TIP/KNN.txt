@@ -1,0 +1,16 @@
+from sklearn.neighbors import NearestNeighbors
+
+model = NearestNeighbors(n_neighbors=3, metric='euclidean')
+model.fit(df[['Height', 'Weight']])
+
+# Compute distances to nearest neighbors
+distances, indices = model.kneighbors(df[['Height', 'Weight']])
+print(distances, indices)
+# Exclude distance to the point itself and sum distances of second and third neighbors
+df['distance'] = distances[:, 1:].sum(axis=1)
+
+# Sort DataFrame based on distance
+sorted_df = df.sort_values(by='distance', ascending=False)
+
+# Print sorted DataFrame
+print(sorted_df)

@@ -1,0 +1,34 @@
+def show_one_image_per_class(dataset, class_names):
+    shown = set()
+    images_by_class = {}
+
+    # Duyệt qua dataset và lấy 1 ảnh cho mỗi class
+    for images, labels in dataset:
+        for img, label in zip(images, labels):
+            class_idx = int(label)
+            if class_idx not in shown:
+                images_by_class[class_idx] = img
+                shown.add(class_idx)
+            if len(shown) == len(class_names):  # đủ rồi
+                break
+        if len(shown) == len(class_names):
+            break
+
+    # Sắp xếp theo thứ tự class index để hiển thị đúng
+    sorted_items = sorted(images_by_class.items())
+
+    # Tính số cột & hàng cho plot
+    num_classes = len(sorted_items)
+    cols = 5
+    rows = (num_classes + cols - 1) // cols
+
+    plt.figure(figsize=(cols * 2, rows * 2))
+    for i, (class_idx, img) in enumerate(sorted_items):
+        ax = plt.subplot(rows, cols, i + 1)
+        plt.imshow(img.numpy().astype("uint8"))
+        plt.title(class_names[class_idx], fontsize=14)
+        plt.axis("off")
+    plt.tight_layout()
+    plt.show()
+    
+show_one_image_per_class(train_ds, class_names)
