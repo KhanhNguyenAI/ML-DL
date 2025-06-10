@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler, PolynomialFeatures
+from imblearn.over_sampling import SMOTE
 
 
 
@@ -23,7 +24,32 @@ Friends_circle_size          77
 Post_frequency               65
 -------------------------------------------------------------- '''
 # Fill missing values with the mean of each column
+numeric_columns = ['Time_spent_Alone', 'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency']
+categorical_columns = ['Stage_fear', 'Drained_after_socializing']
+target_column = 'Personality'
+'''
+plt.figure(figsize=(8,6))
+for i,col in enumerate(numeric_columns):
+    plt.subplot(3,2,i+1)
+    sns.boxplot(data=df,x = target_column,y=col)
+    plt.title(f'{col} of Personality')
+plt.tight_layout()
+plt.show()
+'''
+'''
+plt.figure(figsize=(8,6))
+sns.countplot(data=df,x =target_column)
+plt.title('class distribution of Personality Types')
+plt.xlabel('Personality')
+plt.ylabel('Count')
+plt.show()
+'''
+'''
+sns.pairplot(df[numeric_columns + [target_column]],hue=target_column,diag_kind='hist')
+plt.suptitle('Pair Plot of Numeric Features by Personality',y=1.02)
+plt.show()
 
+'''
 # print(y[1])
 label_enc = LabelEncoder()
 df['Personality']= label_enc.fit_transform(df['Personality'])
@@ -90,11 +116,13 @@ X_val,X_test,y_val,y_test = train_test_split(X_test,y_test,test_size=0.4,random_
 # print(X_train.shape)
 # print(X_val.shape)
 # print(X_test.shape)
-
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_val)
 model_lo = LogisticRegression()
 model_lo.fit(X_train,y_train)
 y_pre = model_lo.predict(X_val)
-# print(classification_report(y_val,y_pre))
+print(classification_report(y_val,y_pre))
 '''
 print(type(X_test))
 print(X_test.iloc[0][:])
